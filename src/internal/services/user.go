@@ -12,10 +12,10 @@ type UserService struct {
 
 func NewUserService(repo User) User { return &UserService{repo: repo} }
 
-func (srv *UserService) CreateUser(user schemes.UserRequest) (schemes.UserResponse, error) {
+func (srv *UserService) CreateUser(user *schemes.UserRequest) (*schemes.UserResponse, error) {
 	return srv.repo.CreateUser(user)
 }
 
-func (srv *UserService) GetUserByUUID(userUUID uuid.UUID) (schemes.UserResponse, error) {
+func (srv *UserService) GetUserByUUID(userUUID *uuid.UUID) (*schemes.UserResponse, error) {
 	return srv.repo.GetUserByUUID(userUUID)
 }

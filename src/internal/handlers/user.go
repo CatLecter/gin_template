@@ -15,7 +15,7 @@ func (h *Handler) CreateUser(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "cannot parse JSON"})
 		return
 	}
-	userResp, err := h.service.CreateUser(user)
+	userResp, err := h.service.CreateUser(&user)
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "user creation error"})
 		return
@@ -31,7 +31,7 @@ func (h *Handler) GetUserByUUID(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "cannot parse UUID"})
 		return
 	}
-	userResp, err := h.service.GetUserByUUID(userUUID)
+	userResp, err := h.service.GetUserByUUID(&userUUID)
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "error receiving the user"})
 		return

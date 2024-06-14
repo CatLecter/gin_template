@@ -7,8 +7,8 @@ import (
 )
 
 type User interface {
-	CreateUser(user schemes.UserRequest) (schemes.UserResponse, error)
-	GetUserByUUID(userUUID uuid.UUID) (schemes.UserResponse, error)
+	CreateUser(user *schemes.UserRequest) (*schemes.UserResponse, error)
+	GetUserByUUID(userUUID *uuid.UUID) (*schemes.UserResponse, error)
 }
 
 type Service struct{ User }
