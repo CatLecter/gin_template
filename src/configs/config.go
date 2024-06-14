@@ -8,6 +8,7 @@ import (
 
 type Config struct {
 	PostgresURI string
+	Host        string
 	Port        string
 }
 
@@ -22,9 +23,11 @@ func NewConfig() *Config {
 		os.Getenv("POSTGRES_PORT"),
 		os.Getenv("POSTGRES_DB"),
 	)
+	host := os.Getenv("HOST")
 	port := os.Getenv("PORT")
 	return &Config{
 		PostgresURI: postgresURI,
+		Host:        host,
 		Port:        port,
 	}
 }

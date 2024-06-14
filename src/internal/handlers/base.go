@@ -19,6 +19,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	user := v1.Group("/user")
 	{
 		user.POST("/", h.CreateUser)
+		user.GET("/:uuid", h.GetUserByUUID)
 	}
 	return router
 }

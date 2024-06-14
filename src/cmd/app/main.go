@@ -28,7 +28,7 @@ func main() {
 
 	server := new(app.App)
 
-	if err := server.Run(cfg.Port, handler.InitRoutes()); err != nil {
+	if err := server.Run(cfg.Host, cfg.Port, handler.InitRoutes()); err != nil {
 		log.Fatalf("Failed to start server: %v", err.Error())
 	}
 }

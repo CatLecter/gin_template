@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
 	log "github.com/sirupsen/logrus"
 	"src/internal/schemes"
@@ -18,6 +19,17 @@ func (repo *UserRepository) CreateUser(user schemes.UserRequest) (schemes.UserRe
 	err := row.Scan(&userResp.UUID, &userResp.FullName, &userResp.Phone, &userResp.CreatedAt, &userResp.UpdatedAt)
 	if err != nil {
 		log.Errorf("Failed to insert user: %s", err.Error())
+		return userResp, err
+	}
+	return userResp, nil
+}
+
+func (repo *UserRepository) GetUserByUUID(userUUID uuid.UUID) (schemes.UserResponse, error) {
+	userResp := schemes.UserResponse{}
+	row := repo.db.QueryRow("SELECT * FROM users WHERE uuid = $1", userUUID)
+	err := row.Scan(&userResp.UUID, &userResp.FullName, &userResp.Phone, &userResp.CreatedAt, &userResp.UpdatedAt)
+	if err != nil {
+		log.Errorf("Failed to get user: %s", err.Error())
 		return userResp, err
 	}
 	return userResp, nil
