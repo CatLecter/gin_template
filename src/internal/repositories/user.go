@@ -10,14 +10,14 @@ import (
 
 type UserRepository struct{ db *pgxpool.Pool }
 
-func NewUserRepository(db *pgxpool.Pool) User { return &UserRepository{db: db} }
+func NewUserRepository(db *pgxpool.Pool) UserRepositoryInterface { return &UserRepository{db: db} }
 
 func (repo *UserRepository) CreateUser(user *schemes.UserRequest) (*schemes.UserResponse, error) {
 	ctx := context.Background()
 	conn, err := repo.db.Acquire(ctx)
 	defer conn.Release()
 	if err != nil {
-		log.Errorf("Error acquiring connection: %v", err.Error())
+		log.Warnf("Error acquiring connection: %v", err.Error())
 		return nil, err
 	}
 	row := conn.QueryRow(
@@ -26,7 +26,7 @@ func (repo *UserRepository) CreateUser(user *schemes.UserRequest) (*schemes.User
 	userResp := schemes.UserResponse{}
 	err = row.Scan(&userResp.UUID, &userResp.FullName, &userResp.Phone, &userResp.CreatedAt, &userResp.UpdatedAt)
 	if err != nil {
-		log.Errorf("Failed to insert user: %s", err.Error())
+		log.Warnf("Failed to insert user: %s", err.Error())
 		return nil, err
 	}
 	return &userResp, nil
@@ -37,15 +37,15 @@ func (repo *UserRepository) GetUserByUUID(userUUID *uuid.UUID) (*schemes.UserRes
 	conn, err := repo.db.Acquire(ctx)
 	defer conn.Release()
 	if err != nil {
-		log.Errorf("Error acquiring connection: %v", err.Error())
+		log.Warnf("Error acquiring connection: %v", err.Error())
 		return nil, err
 	}
-	userResp := schemes.UserResponse{}
 	row := conn.QueryRow(ctx, "SELECT * FROM users WHERE uuid = $1", &userUUID)
+	userResp := schemes.UserResponse{}
 	err = row.Scan(&userResp.UUID, &userResp.FullName, &userResp.Phone, &userResp.CreatedAt, &userResp.UpdatedAt)
 	if err != nil {
-		log.Errorf("Failed to get user: %s", err.Error())
-		return &userResp, err
+		log.Warnf("Failed to get user: %s", err.Error())
+		return nil, err
 	}
 	return &userResp, nil
 }

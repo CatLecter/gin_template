@@ -1,18 +1,17 @@
 package services
 
 import (
-	"github.com/google/uuid"
+	"github.com/gin-gonic/gin"
 	"src/internal/repositories"
-	"src/internal/schemes"
 )
 
-type User interface {
-	CreateUser(user *schemes.UserRequest) (*schemes.UserResponse, error)
-	GetUserByUUID(userUUID *uuid.UUID) (*schemes.UserResponse, error)
+type UserServiceInterface interface {
+	CreateUser(ctx *gin.Context)
+	GetUserByUUID(ctx *gin.Context)
 }
 
-type Service struct{ User }
+type Service struct{ UserServiceInterface }
 
 func NewService(repos *repositories.Repository) *Service {
-	return &Service{User: NewUserService(repos.User)}
+	return &Service{UserServiceInterface: NewUserService(repos.UserRepositoryInterface)}
 }
