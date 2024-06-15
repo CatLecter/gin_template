@@ -17,7 +17,13 @@ func main() {
 	})
 	cfg := configs.NewConfig()
 
-	db, err := database.NewDB(cfg.PostgresURI)
+	db, err := database.NewPool(
+		&cfg.PostgresURI,
+		&cfg.MaxConnections,
+		&cfg.MinConnections,
+		&cfg.MaxConnLifetime,
+		&cfg.MaxConnIdleTime,
+	)
 	if err != nil {
 		log.Fatalf("Failed to connect to database: %v", err.Error())
 	}

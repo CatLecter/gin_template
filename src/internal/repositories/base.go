@@ -2,7 +2,7 @@ package repositories
 
 import (
 	"github.com/google/uuid"
-	"github.com/jmoiron/sqlx"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"src/internal/schemes"
 )
 
@@ -13,7 +13,7 @@ type User interface {
 
 type Repository struct{ User }
 
-func NewRepository(db *sqlx.DB) *Repository {
+func NewRepository(db *pgxpool.Pool) *Repository {
 	return &Repository{
 		User: NewUserRepository(db),
 	}
