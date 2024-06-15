@@ -1,7 +1,6 @@
 package main
 
 import (
-	_ "github.com/lib/pq"
 	log "github.com/sirupsen/logrus"
 	"src/app"
 	"src/configs"
