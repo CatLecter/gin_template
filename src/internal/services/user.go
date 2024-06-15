@@ -25,6 +25,18 @@ func (srv *UserService) CreateUser(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "cannot parse JSON"})
 		return
 	}
+	isExists, err := srv.repo.CheckUserByPhone(&user.Phone)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "cannot check user"})
+		return
+	}
+	if *isExists {
+		ctx.AbortWithStatusJSON(
+			http.StatusUnprocessableEntity,
+			gin.H{"error": fmt.Sprintf("user with phone number %s already exists", user.Phone)},
+		)
+		return
+	}
 	userResp, err := srv.repo.CreateUser(&user)
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "user creation error"})

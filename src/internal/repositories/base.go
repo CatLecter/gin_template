@@ -9,6 +9,7 @@ import (
 type UserRepositoryInterface interface {
 	CreateUser(user *schemes.UserRequest) (*schemes.UserResponse, error)
 	GetUserByUUID(userUUID *uuid.UUID) (*schemes.UserResponse, error)
+	CheckUserByPhone(phone *string) (*bool, error)
 }
 
 type Repository struct{ UserRepositoryInterface }
