@@ -1,0 +1,106 @@
+definitions:
+  schemes.UserRequest:
+    properties:
+      full_name:
+        type: string
+      phone:
+        type: string
+    required:
+    - full_name
+    - phone
+    type: object
+  schemes.UserResponse:
+    properties:
+      created_at:
+        type: string
+      full_name:
+        type: string
+      phone:
+        type: string
+      updated_at:
+        type: string
+      uuid:
+        type: string
+    type: object
+  utils.HTTPError:
+    properties:
+      detail:
+        type: string
+      result:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /api/v1/user:
+    post:
+      description: User endpoints
+      parameters:
+      - description: User
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/schemes.UserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schemes.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.HTTPError'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/utils.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.HTTPError'
+      summary: Creating a new user
+      tags:
+      - User
+  /api/v1/user/{uuid}:
+    get:
+      description: Get user by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: uuid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schemes.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.HTTPError'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/utils.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.HTTPError'
+      summary: Get user by ID
+      tags:
+      - User
+swagger: "2.0"
