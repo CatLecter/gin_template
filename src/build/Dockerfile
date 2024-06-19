@@ -8,7 +8,7 @@ COPY . .
 
 RUN go mod tidy &&  \
     go mod download &&  \
-    GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o main cmd/app/main.go
+    GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -mod=vendor -o main cmd/app/main.go
 
 FROM debian:12-slim
 

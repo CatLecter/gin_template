@@ -11,9 +11,7 @@ import (
 )
 
 func main() {
-	log.SetFormatter(&log.JSONFormatter{
-		PrettyPrint: true,
-	})
+	log.SetFormatter(&log.JSONFormatter{})
 	cfg := configs.NewConfig()
 
 	db, err := database.NewPool(

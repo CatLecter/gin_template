@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"src/internal/repositories"
 	"src/internal/schemes"
+	"src/internal/utils"
 )
 
 type UserService struct {
@@ -22,24 +23,24 @@ func (srv *UserService) CreateUser(ctx *gin.Context) {
 	user := schemes.UserRequest{}
 	if err := ctx.BindJSON(&user); err != nil {
 		log.Errorf("Error parsing body: %v", err.Error())
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "cannot parse JSON"})
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, utils.NewHTTPError(fmt.Sprintf("cannot parse JSON")))
 		return
 	}
 	isExists, err := srv.repo.CheckUserByPhone(&user.Phone)
 	if err != nil {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "cannot check user"})
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, utils.NewHTTPError(fmt.Sprintf("cannot check user")))
 		return
 	}
 	if *isExists {
 		ctx.AbortWithStatusJSON(
 			http.StatusUnprocessableEntity,
-			gin.H{"error": fmt.Sprintf("user with phone number %s already exists", user.Phone)},
+			utils.NewHTTPError(fmt.Sprintf("user with phone number %s already exists", user.Phone)),
 		)
 		return
 	}
 	userResp, err := srv.repo.CreateUser(&user)
 	if err != nil {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "user creation error"})
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, utils.NewHTTPError("user creation error"))
 		return
 	}
 	ctx.JSON(http.StatusOK, userResp)
@@ -50,14 +51,13 @@ func (srv *UserService) GetUserByUUID(ctx *gin.Context) {
 	userUUID, err := uuid.Parse(ctx.Param("uuid"))
 	if err != nil {
 		log.Errorf("Error parsing user UUID: %v", err.Error())
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "cannot parse user UUID"})
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, utils.NewHTTPError("cannot parse user UUID"))
 		return
 	}
 	userResp, err := srv.repo.GetUserByUUID(&userUUID)
 	if err != nil {
 		ctx.AbortWithStatusJSON(
-			http.StatusNotFound,
-			gin.H{"error": fmt.Sprintf("the user with UUID=%v was not found", userUUID)},
+			http.StatusNotFound, utils.NewHTTPError(fmt.Sprintf("the user with UUID=%v was not found", userUUID)),
 		)
 		return
 	}

@@ -33,9 +33,9 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		gin.LoggerWithFormatter(
 			func(param gin.LogFormatterParams) string {
 				log := fmt.Sprintf(
-					"{\"datetime\": \"%s\", \"client_ip\": \"%s\", \"method\": \"%s\", "+
+					"{\"time\": \"%s\", \"client_ip\": \"%s\", \"method\": \"%s\", "+
 						"\"path\": \"%s\", \"status_code\": \"%v\", \"latency\": \"%v ms\"}\n",
-					param.TimeStamp.Format(time.DateTime),
+					param.TimeStamp.Format(time.RFC3339),
 					param.ClientIP,
 					param.Method,
 					param.Path,
